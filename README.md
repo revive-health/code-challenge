@@ -26,7 +26,7 @@ docker-compose up -d
 3. Start the API:
 
 ```bash
-dotnet run
+dotnet run --project src/CodeChallenge.Api/CodeChallenge.Api.csproj
 ```
 
 4. Open the API docs at `http://localhost:5062/api-doc` (or the port you see in the console).
