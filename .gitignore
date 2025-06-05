@@ -1,0 +1,86 @@
+# ---- .NET / C# ----
+bin/
+obj/
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+*.cache
+*.pdb
+*.mdb
+*.log
+*.vspscc
+*.vssscc
+*.dbmdl
+*.bak
+*.orig
+*.tmp
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Build results
+*.dll
+*.exe
+*.app
+*.js
+*.js.map
+*.d.ts
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.nuspec
+*.psmdcp
+*.symbols.nupkg
+
+# Rider
+.idea/
+*.sln.iml
+
+# ---- macOS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# ---- Visual Studio Code ----
+.vscode/
+.history/
+*.code-workspace
+
+# ---- Tests and Coverage ----
+TestResults/
+*.coverage
+*.coveragexml
+*.testsettings
+*.vsmdi
+*.testresults
+*.trx
+*.xml
