@@ -110,7 +110,3 @@ Return a list of members who have been prescribed a medication with the given na
 * Use DTOs for request bodies where appropriate.
 * Use async/await throughout.
 * Aim for clean, readable code.
-
----
-
-Let me know if you’d like me to commit this into your project or attach it as a `README.md`.
