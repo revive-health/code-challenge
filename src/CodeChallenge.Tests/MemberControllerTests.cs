@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 using CodeChallenge.Api.Controllers;
 using CodeChallenge.Api.Dtos;
