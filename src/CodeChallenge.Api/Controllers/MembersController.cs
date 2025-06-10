@@ -65,19 +65,19 @@ public class MembersController : ControllerBase
     }
 
     [HttpGet("{memberId}/medications")]
-    public async Task<ActionResult<List<Medication>>> GetMedications(int memberId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+    public async Task<ActionResult<List<Medication>>> GetMedications(int memberId, [FromQuery] DateTime? fromDate, [FromQuery] DateTime? toDate)
     {
         bool memberExists = await _db.Members.AnyAsync(m => m.Id == memberId);
         if(!memberExists) return NotFound();
 
         var medsQuery = _db.Medications.Where(m => m.MemberId == memberId).AsQueryable();
 
-        if(startDate.HasValue){
-            medsQuery = medsQuery.Where(m => m.PrescribedDate >= startDate.Value);
+        if(fromDate.HasValue){
+            medsQuery = medsQuery.Where(m => m.PrescribedDate >= fromDate.Value);
         }
 
-        if(endDate.HasValue){
-            medsQuery = medsQuery.Where(m => m.PrescribedDate <= endDate.Value);
+        if(toDate.HasValue){
+            medsQuery = medsQuery.Where(m => m.PrescribedDate <= toDate.Value);
         }
 
         var results = await medsQuery.ToListAsync();
