@@ -65,10 +65,23 @@ public class MembersController : ControllerBase
     }
 
     [HttpGet("{memberId}/medications")]
-    public async Task<ActionResult<IEnumerable<Medication>>> GetMedications(int memberId)
+    public async Task<ActionResult<List<Medication>>> GetMedications(int memberId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
     {
-        var member = await _db.Members.Include(m => m.Medications).FirstOrDefaultAsync(m => m.Id == memberId);
-        return member is null ? NotFound() : Ok(member.Medications);
+        bool memberExists = await _db.Members.AnyAsync(m => m.Id == memberId);
+        if(!memberExists) return NotFound();
+
+        var medsQuery = _db.Medications.Where(m => m.MemberId == memberId).AsQueryable();
+
+        if(startDate.HasValue){
+            medsQuery = medsQuery.Where(m => m.PrescribedDate >= startDate.Value);
+        }
+
+        if(endDate.HasValue){
+            medsQuery = medsQuery.Where(m => m.PrescribedDate <= endDate.Value);
+        }
+
+        var results = await medsQuery.ToListAsync();
+        return Ok(results);
     }
 
     [HttpPost("{memberId}/medications")]
@@ -82,6 +95,7 @@ public class MembersController : ControllerBase
             Name = dto.Name,
             DosageMg = dto.DosageMg,
             PrescribedDate = dto.PrescribedDate,
+            Notes = dto.Notes ?? null,
             MemberId = memberId
         };
 
@@ -89,5 +103,35 @@ public class MembersController : ControllerBase
         await _db.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetMedications), new { memberId }, medication);
+    }
+
+    [HttpGet("{memberId}/summary")]
+    public async Task<ActionResult<Medication>> GetMemberSummary(int memberId)
+    {
+        var member = await _db.Members.Include(m => m.Medications).FirstOrDefaultAsync(m => m.Id == memberId);
+        if(member == null) return NotFound();
+
+        var summary = new MemberSummaryResponseDto
+        {
+            FullName = member.FirstName + " " + member.LastName,
+            Age = (DateTime.Today - member.DateOfBirth).Days / 365,
+            MedicationCount = member.Medications.Count
+        };
+
+        return Ok(summary);
+    }
+
+    [HttpGet("medications/search")]                  
+    public async Task<ActionResult<List<Member>>> GetMembersByMedicationName([FromQuery] string name){
+        if(string.IsNullOrEmpty(name)) return BadRequest("Please provide a medication name.");
+
+        var normalizedName = name.ToLower();
+        var memberList = await _db.Medications.Where(m => m.Name.ToLower() == normalizedName)
+                                        .Include(m => m.Member)
+                                        .Select(m => m.Member)
+                                        .Distinct()
+                                        .ToListAsync();
+
+        return Ok(memberList);
     }
 }

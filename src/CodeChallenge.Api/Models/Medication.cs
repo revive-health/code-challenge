@@ -8,6 +8,7 @@ public class Medication
     public string Name { get; set; } = string.Empty;
     public int DosageMg { get; set; }
     public DateTime PrescribedDate { get; set; }
+    public string? Notes {get; set;}
 
     public int MemberId { get; set; }
     [JsonIgnore]
