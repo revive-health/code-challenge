@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace CodeChallenge.Api.Models;
@@ -8,6 +9,8 @@ public class Medication
     public string Name { get; set; } = string.Empty;
     public int DosageMg { get; set; }
     public DateTime PrescribedDate { get; set; }
+    [MaxLength(4000)]
+    public string? Notes {get; set;}
 
     public int MemberId { get; set; }
     [JsonIgnore]
